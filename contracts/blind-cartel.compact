@@ -1,0 +1,54 @@
+pragma language_version >= 0.23;
+
+import CompactStandardLibrary;
+
+struct SealedBidEntry {
+  auctionId: Bytes<32>,
+  bidderCommitment: Bytes<32>
+}
+
+export ledger sealedBids: Map<Bytes<32>, SealedBidEntry>;
+export ledger nextBidId: Counter;
+
+witness bidderSecret(): Bytes<32>;
+witness bidAmount(): Bytes<32>;
+
+export circuit bidderCommitment(sk: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "bc:bidder:"), sk]);
+}
+
+export circuit bidCommitment(
+  auctionId: Bytes<32>,
+  sk: Bytes<32>,
+  amount: Bytes<32>
+): Bytes<32> {
+  return persistentHash<Vector<4, Bytes<32>>>([
+    pad(32, "bc:sealed:"),
+    auctionId,
+    sk,
+    amount
+  ]);
+}
+
+export circuit submitSealedBid(auctionId: Bytes<32>): [] {
+  const sk = bidderSecret();
+  const amount = bidAmount();
+  const bidderCommit = bidderCommitment(sk);
+  const commit = bidCommitment(auctionId, sk, amount);
+
+  assert(!sealedBids.member(disclose(commit)), "bid already sealed");
+
+  nextBidId.increment(1);
+
+  sealedBids.insert(disclose(commit), SealedBidEntry {
+    auctionId: disclose(auctionId),
+    bidderCommitment: disclose(bidderCommit)
+  });
+}
+
+export circuit proveBidOwnership(targetBidCommitment: Bytes<32>): [] {
+  assert(sealedBids.member(disclose(targetBidCommitment)), "bid not found");
+  const entry = sealedBids.lookup(disclose(targetBidCommitment));
+  const callerCommit = bidderCommitment(bidderSecret());
+  assert(callerCommit == entry.bidderCommitment, "not the bidder");
+}
