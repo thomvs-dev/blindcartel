@@ -1,38 +1,87 @@
 # Blind Cartel
 
-Industry-specific AI intelligence network on [Midnight Network](https://midnight.network). Competing companies contribute private data signals (inventory, pricing, churn, fraud patterns) to shared AI agents. ZK proofs verify each contribution is valid without revealing raw data.
+Industry-specific AI intelligence network on [Midnight Network](https://midnight.network). Competing firms contribute sealed bid signals to a shared board — ZK proofs verify each contribution without revealing raw amounts or bidder secrets.
 
-**Level 2 focus:** Vite + React dApp with storyline landing, Lace/1AM wallet connect, local undeployed deploy/join, and sealed-bid circuit calls from the UI.
+**Live dApp (Preview):** [https://blindcartel.vercel.app](https://blindcartel.vercel.app)
+
+| Level | Codename | Status |
+|-------|----------|--------|
+| L1 | New Moon | Complete |
+| L2 | Waxing Crescent | Complete |
+| **L3** | **First Quarter** | **Complete** |
+
+## Screenshots
+
+### Landing (desktop)
+
+![Landing desktop](docs/screenshots/frontend-landing-desktop.png)
+
+### Auction desk (desktop)
+
+![App desktop](docs/screenshots/frontend-app-desktop.png)
+
+### Landing (mobile)
+
+![Landing mobile](docs/screenshots/frontend-landing-mobile.png)
+
+## Preview deployment
+
+| Field | Value |
+|-------|--------|
+| Network | `preview` |
+| Frontend | [blindcartel.vercel.app](https://blindcartel.vercel.app) |
+| Contract address | `206dbc664982bd59189123e331d1f0ce5a7b76b238edd4e78e39feb7c15c4457` |
+| Indexer | `https://indexer.preview.midnight.network/api/v4/graphql` |
+| ZK assets | `/zk/blind-cartel` (served from the web build) |
+
+Config source: [`web/src/config.ts`](web/src/config.ts). Connect **Lace** or **1AM** on **preview**.
+
+## Test output (3 tests passing)
+
+```text
+fahmin@Defiance15:~/midnight/blindcartel$ yarn test:local
+yarn run v1.22.22
+$ MIDNIGHT_NETWORK=undeployed yarn test
+$ NODE_OPTIONS='--experimental-vm-modules' vitest run
+
+ RUN  v3.2.4 /home/fahmin/midnight/blindcartel
+
+ ✓ src/test/blind-cartel.test.ts (3)
+   ✓ Blind Cartel Contract (3)
+     ✓ deploys the contract
+     ✓ submits a sealed bid with disclosed commitment only
+     ✓ proves bidder ownership without revealing bid amount
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  03:12:41
+   Duration  48.27s
+
+Done in 49.12s.
+```
+
+Full dump: [`docs/screenshots/test-passing.txt`](docs/screenshots/test-passing.txt).
 
 ## Privacy claim
 
-Bid amounts and bidder secrets stay in local witness / private state. On-chain and indexer-visible data are limited to:
+| Data | Visibility | Where |
+|------|------------|-------|
+| Bid amount | **Private** | Witness + local private state |
+| Bidder secret | **Private** | Witness only |
+| Bid commitment | **Public** | On-chain `sealedBids` map key |
+| Auction ID | **Public** | `SealedBidEntry.auctionId` |
+| Bidder commitment | **Public** | `SealedBidEntry.bidderCommitment` |
 
-- bid commitment hash
-- auction ID
-- bidder commitment
+An observer sees that a sealed bid exists for an auction. They cannot recover the bid amount or raw signal from chain state alone.
 
-An observer can see that a sealed bid exists for an auction. They cannot recover the bid amount or raw signal from chain state alone.
+## Circuits
 
-## Prerequisites
+| Circuit | Purpose |
+|---------|---------|
+| `submitSealedBid(auctionId)` | Hash witnesses; disclose commitment + auction metadata |
+| `proveBidOwnership(bidCommitment)` | Bidder ZK auth without revealing amount |
 
-- **Node.js 22+** (`nvm use 22`)
-- **Docker** (local devnet + proof server)
-- **Compact compiler** 0.31.1
-- **Yarn 1.22**
-- **Lace** or **1AM** Midnight wallet extension (for the web desk)
-
-### Install Compact
-
-```bash
-curl --proto '=https' --tlsv1.2 -sSf \
-  https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
-source $HOME/.local/bin/env
-compact update 0.31.1
-compact compile --version
-```
-
-## Setup (contract + local network)
+## Quick start
 
 ```bash
 nvm use 22
@@ -40,92 +89,36 @@ yarn install
 yarn compile
 yarn env:up
 yarn test:local
-```
-
-If port 6300 is in use, `yarn env:up` starts node + indexer only; keep a proof server on `http://127.0.0.1:6300`.
-
-## Deploy (undeployed)
-
-```bash
-yarn env:up
-yarn deploy:undeployed
-```
-
-Uses the pre-funded genesis wallet on local devnet. Address is written to [`deployment.json`](deployment.json).
-
-Current undeployed address: `9550de42a7f1a4239c271719a00004c03890caa32874e06c9b8b5bd2d6276891`.
-
-Preprod is out of scope for this Level 2 drop.
-
-## Frontend (Level 2)
-
-```bash
-nvm use 22
-yarn web:install
 yarn sync:zk
-yarn web:dev
+yarn web:dev          # http://127.0.0.1:3000
 ```
 
-Open `http://127.0.0.1:3000`:
-
-- `/` storyline landing
-- `/app` auction desk: connect wallet on `undeployed`, deploy or join, call `submitSealedBid` / `proveBidOwnership`, inspect privacy panel + public registry
-
-Wallet connect uses `window.midnight.mnLace` (or the first detected Midnight wallet), then `connect('undeployed')`. Disconnect calls the wallet API when available.
-
-Build the web bundle:
-
-```bash
-yarn web:build
-# or full: yarn build
-```
-
-`yarn sync:zk` copies `contracts/managed/blind-cartel` into `web/public/zk/blind-cartel` for `FetchZkConfigProvider`.
-
-## Public state vs private witness
-
-| Data | Visibility | Stored where |
-|------|------------|--------------|
-| Bid amount (signal quality score) | **Private** | Witness + local private state |
-| Bidder secret | **Private** | Witness only |
-| Bid commitment `persistentHash(auction, bidder, amount)` | **Public** | On-chain `sealedBids` map key |
-| Auction ID | **Public** | `SealedBidEntry.auctionId` |
-| Bidder commitment | **Public** | `SealedBidEntry.bidderCommitment` |
-
-## Circuits
-
-- `submitSealedBid(auctionId)` — hash witnesses, disclose commitment + auction metadata
-- `proveBidOwnership(bidCommitment)` — bidder ZK auth without revealing amount
+| Script | Purpose |
+|--------|---------|
+| `yarn test:local` | Integration tests on undeployed |
+| `yarn deploy:preview` | Deploy contract to preview |
+| `yarn web:build` | Production Vite build (`web/` → Vercel root) |
+| `yarn sync:zk` | Copy managed ZK assets into `web/public` |
 
 ## Project structure
 
 ```
-contracts/
-  blind-cartel.compact
-  witnesses.ts
-  managed/blind-cartel/
-src/
-  test/blind-cartel.test.ts
-  deploy.ts
-web/
-  src/pages/LandingPage.tsx
-  src/pages/AppPage.tsx
-  src/lib/midnight.ts
-  src/lib/blind-cartel.ts
-  public/zk/blind-cartel/
-scripts/
-  sync-zk-assets.mjs
+contracts/   Compact + managed ZK artifacts
+api/         Shared contract helpers for web + node
+src/         Wallet, deploy, vitest
+web/         React 19 + Vite dApp (Vercel root directory)
 ```
 
-## Toolchain versions
+## Toolchain
 
 | Component | Version |
 |-----------|---------|
-| compact | 0.31.1 |
+| Node.js | 22+ |
+| Compact | 0.31.1 |
 | compact-runtime | 0.16.0 |
-| compact-js | 2.5.0 |
-| midnight-js | 4.0.4 |
-| ledger-v8 | 8.0.3 |
+| compact-js | 2.5.1 |
+| midnight-js | 4.1.1 |
+| ledger-v8 | 8.1.0 |
 
 ## License
 

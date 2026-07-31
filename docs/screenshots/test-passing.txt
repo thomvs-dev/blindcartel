@@ -1,0 +1,20 @@
+fahmin@Defiance15:~/midnight/blindcartel$ yarn test:local
+yarn run v1.22.22
+$ MIDNIGHT_NETWORK=undeployed yarn test
+$ NODE_OPTIONS='--experimental-vm-modules' vitest run
+
+ RUN  v3.2.4 /home/fahmin/midnight/blindcartel
+
+ ✓ src/test/blind-cartel.test.ts (3)
+   ✓ Blind Cartel Contract (3)
+     ✓ deploys the contract
+     ✓ submits a sealed bid with disclosed commitment only
+     ✓ proves bidder ownership without revealing bid amount
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  03:12:41
+   Duration  48.27s (transform 412ms, setup 0ms, collect 1.84s, tests 45.91s, environment 0ms, prepare 89ms)
+
+Done in 49.12s.
+fahmin@Defiance15:~/midnight/blindcartel$
