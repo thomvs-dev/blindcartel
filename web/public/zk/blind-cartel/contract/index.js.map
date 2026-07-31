@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "file": "index.js",
+  "sourceRoot": "../../../",
+  "sources": ["blind-cartel.compact", "compiler/standard-library.compact"],
+  "names": [],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;EAAA;;;;;;;;;;;;;;;;MAeA,AAAA,gBAEC;;OAAA;MAED,AAAA,aAWC;;OAAA;MAED,AAAA,eAcC;;;;;cAd8B,WAAoB;;;;;;;;;;;;;;;;;;yCAApB,WAAoB;;;;;;;;;iDAApB,WAAoB;;;OAclD;MAED,AAAA,iBAKC;;;;;cALgC,qBAA8B;;;;;;;;;;;;;;;;;;yCAA9B,qBAA8B;;;;;;;;;mDAA9B,qBAA8B;;;OAK9D;;;;;;;;;;GACA;EAtDD;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;IASA;;;;;;;;;;yEAAyD;IACzD;;;;;;;;;yEAAiC;;;;;;;GA4ChC;ECtDD,AAAA,kBAAA;oEAAA;;;EAAA,AAAA,kBAAA;oEAAA;;;EDYA,AAAA,eAAkC;;0DAAlC,YAAkC;;;;;;;;;;;;;;GAAA;EAClC,AAAA,YAA+B;;0DAA/B,SAA+B;;;;;;;;;;;;;;GAAA;EAE/B,AAAA,mBAEC,CAF+B,IAAa;;mCACyB,IAAE;GACvE;EAED,AAAA,gBAWC,CAVC,WAAoB,EACpB,IAAa,EACb,QAAiB;;mCAIf,WAAS;mCACT,IAAE;mCACF,QAAM;GAET;EAED,AAAA,kBAcC,4BAd8B,WAAoB;UAC3C,IAAmB;UACnB,QAAoB;UACpB,cAAmC,4BAAH,IAAE;UAClC,QAA6C,yBAAtB,WAAS,EAAE,IAAE,EAAE,QAAM;qDAE1C;;;;;;;;;;;4KAA2B,QAAM;;;;0HAAvB;;UAElB,KAAS;IAAT;;;;;;;;;;6FAAA,KAAS;;;;wEAAA;UAET,KAAU,gBACY,WAAS,oBACF,cAAY;IAFzC;;;;;;;;;;2HAA2B,QAAM;;;2HAAjC,KAAU;;;wEAAA;;GAIX;EAED,AAAA,oBAKC,4BALgC,qBAA8B;oDACtD;;;;;;;;;;;2KAA2B,qBAAmB;;;;yHAApC;;UACX,OAAwD,2BAAhD;;;;;;;;;;;;;;uIAA2B,qBAAmB;;;iHAApC;UAClB,cAA+C;;0CAC9C,cAAY;0CAAI,OAAK;;;GAC7B;;;;;;;;;;;;;;;;;;;;IA5CD;;;;;uCAAA;;;;;;;;;;;;;;;;4GAAyD;;;;;;uCAAzD;;;;;;;;;;;;4GAAyD;;;;;;;;;;;;;;uCAAzD;;;;;;;;;;;;;;;4GAAyD;;;;;;;;;;;;;;uCAAzD;;;;;;;;;;;;;;;;;4GAAyD;;;;;;;;;KAAA;IACzD;qCAAA;;;;;;;;;;;0GAAiC;KAAA;;;;;;;;;;EAKjC,AAAA,gBAEC;;;;UAF+B,IAAa;;;;;;;;8CAAb,IAAa;GAE5C;EAED,AAAA,aAWC;;;;UAVC,WAAoB;UACpB,IAAa;UACb,QAAiB;;;;;;;;;;;;;;;;;;;;;;2CAFjB,WAAoB,EACpB,IAAa,EACb,QAAiB;GAQlB;;;;"
+}
