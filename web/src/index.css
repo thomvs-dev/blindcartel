@@ -1,0 +1,258 @@
+@import '@fontsource/space-grotesk/500.css';
+@import '@fontsource/space-grotesk/600.css';
+@import '@fontsource/space-grotesk/700.css';
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Space Grotesk', ui-sans-serif, sans-serif;
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Industrial command dock — near-black + amber warning accent */
+  --color-bc-steel: #0b0e11;
+  --color-bc-elevated: #12171c;
+  --color-bc-soft: #1a2026;
+  --color-bc-ink: #e6ecef;
+  --color-bc-mute: #7a8690;
+  --color-bc-line: #252c34;
+  --color-bc-cyan: #f5a623;
+  --color-bc-cyan-ink: #1a1205;
+  --color-bc-rust: #c45c3a;
+  --color-bc-ok: #3d9b74;
+  --color-bc-day: #e8ecf0;
+  --color-bc-day-ink: #0b0e11;
+  --color-bc-day-mute: #5a6770;
+  --color-bc-day-line: #c5cdd4;
+}
+
+:root {
+  --bc-steel: #0b0e11;
+  --bc-elevated: #12171c;
+  --bc-soft: #1a2026;
+  --bc-ink: #e6ecef;
+  --bc-mute: #7a8690;
+  --bc-line: #252c34;
+  --bc-cyan: #f5a623;
+  --bc-cyan-ink: #1a1205;
+  --bc-rust: #c45c3a;
+  --bc-ok: #3d9b74;
+  --bc-day: #e8ecf0;
+  --bc-day-ink: #0b0e11;
+  --bc-day-mute: #5a6770;
+  --bc-day-line: #c5cdd4;
+  --bc-radius: 2px;
+  --nav-h: 56px;
+  --rail-w: 56px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bc-steel);
+  color: var(--bc-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+}
+
+/* Fine scanline grain — ops room, not luxury blur */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+code,
+.mono {
+  font-family: var(--font-mono);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--bc-cyan) 35%, transparent);
+  color: var(--bc-ink);
+}
+
+html.compact .py-12 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+html.compact .md\:py-16 {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.surface-day {
+  background: var(--bc-day);
+  color: var(--bc-day-ink);
+}
+
+.surface-day .text-mute,
+.surface-day .bc-mute {
+  color: var(--bc-day-mute);
+}
+
+/* LED status dot */
+.led {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  background: var(--bc-ok);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--bc-ok) 55%, transparent);
+}
+
+.led-amber {
+  background: var(--bc-cyan);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--bc-cyan) 55%, transparent);
+}
+
+/* Segmented XP / clearance blocks */
+.xp-segments {
+  display: grid;
+  grid-template-columns: repeat(20, minmax(0, 1fr));
+  gap: 2px;
+  height: 10px;
+}
+
+.xp-segments > span {
+  background: var(--bc-soft);
+  border: 1px solid var(--bc-line);
+}
+
+.xp-segments > span.on {
+  background: var(--bc-cyan);
+  border-color: color-mix(in srgb, var(--bc-cyan) 70%, #000);
+}
+
+/* —— Envelope seal stamp —— */
+@keyframes seal-stamp {
+  0% {
+    opacity: 0;
+    transform: scale(1.4) rotate(-10deg);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(0.94) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.anim-seal-stamp {
+  animation: seal-stamp 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* —— Auction countdown pulse —— */
+@keyframes countdown-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--bc-cyan) 0%, transparent);
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--bc-cyan) 14%, transparent);
+    opacity: 0.92;
+  }
+}
+
+.anim-countdown-pulse {
+  animation: countdown-pulse 2.4s ease-in-out infinite;
+}
+
+/* —— Bid locked shutter —— */
+@keyframes shutter-lock {
+  0% {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0.4;
+  }
+  55% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+.anim-shutter-lock {
+  animation: shutter-lock 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes metal-haze {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.78;
+  }
+}
+
+.anim-metal-haze {
+  animation: metal-haze 14s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .anim-seal-stamp,
+  .anim-countdown-pulse,
+  .anim-shutter-lock,
+  .anim-metal-haze {
+    animation: none !important;
+  }
+}
