@@ -2,7 +2,8 @@
 
 Industry-specific AI intelligence network on [Midnight Network](https://midnight.network). Competing firms contribute sealed bid signals to a shared board — ZK proofs verify each contribution without revealing raw amounts or bidder secrets.
 
-**Live dApp (Preview):** [https://blindcartel.vercel.app](https://blindcartel.vercel.app)
+**Live dApp (Preview):** [https://blindcartel.vercel.app](https://blindcartel.vercel.app)  
+**Live demo video:** [Watch on YouTube](https://www.youtube.com/watch?v=Cx_OKQSm6_E)
 
 | Level | Codename | Status |
 |-------|----------|--------|
@@ -30,6 +31,7 @@ Industry-specific AI intelligence network on [Midnight Network](https://midnight
 |-------|--------|
 | Network | `preview` |
 | Frontend | [blindcartel.vercel.app](https://blindcartel.vercel.app) |
+| Demo video | [YouTube](https://www.youtube.com/watch?v=Cx_OKQSm6_E) |
 | Contract address | `206dbc664982bd59189123e331d1f0ce5a7b76b238edd4e78e39feb7c15c4457` |
 | Indexer | `https://indexer.preview.midnight.network/api/v4/graphql` |
 | ZK assets | `/zk/blind-cartel` (served from the web build) |
